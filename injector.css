@@ -1,3 +1,9 @@
+div.blocks {
+    height: auto !important;
+}
 .page-content {
     padding-right: 0px !important;
+}
+#the_one_ad {
+    margin-left: 25px;
 }

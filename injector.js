@@ -1,36 +1,11 @@
-function doit() {
-    deleteElements('iframe, #ad-horizontal, #ad-vertical, div.blocks, #sidebar-wrapper');
-}
+setInterval(blockFrames, 500);
 
-setInterval(doit, 1000);
+function blockFrames() {
+    var els = $('iframe, #ad-horizontal, #ad-vertical, div.block-pair, #sidebar-wrapper');
+    els.remove();
 
-function deleteElements(selector) {
-    // in case the content script was injected after the page is partially loaded
-    doDelete(document.querySelectorAll(selector));
 
-    var mo = new MutationObserver(process);
-    mo.observe(document, {subtree:true, childList:true});
-    document.addEventListener('DOMContentLoaded', function() { mo.disconnect() });
-
-    function process(mutations) {
-        for (var i = 0; i < mutations.length; i++) {
-            var nodes = mutations[i].addedNodes;
-            for (var j = 0; j < nodes.length; j++) {
-                var n = nodes[j];
-                if (n.nodeType != 1) // only process Node.ELEMENT_NODE
-                    continue;
-                doDelete(n.matches(selector) ? [n] : n.querySelectorAll(selector));
-            }
-        }
-    }
-    function doDelete(nodes) {
-        [].forEach.call(nodes, function(node) {
-        	console.log("Wowhead IframeBlocker: Removing node", node);
-        	node.remove();
-        });
+    if ($('#the_one_ad').length === 0) {
+        $('div.blocks').append("<h1 id='the_one_ad'>PSA from WowHead IFrameBlocker: Go buy <a href='http://www.wowhead.com/premium'>Premium</a>.  It's $9 per year.</h1>");
     }
 }
-
-// Chrome pre-34
-if (!Element.prototype.matches)
-    Element.prototype.matches = Element.prototype.webkitMatchesSelector;
